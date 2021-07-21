@@ -3,7 +3,7 @@ From: ubuntu:20.04
 
 %help
   Singularity container that runs cat12 longitudinal processing stream. 
-  Info and usage: /opt/cat12_longitudinal/README.md
+  Info and usage: /opt/cat12_long/README.md
 
 
 %setup
@@ -11,7 +11,7 @@ From: ubuntu:20.04
   # Create an installation directory for the codebase. We can often finagle this
   # in the 'files' section and forgo the 'setup' section entirely, but it's 
   # clearer this way.
-  mkdir -p "${SINGULARITY_ROOTFS}"/opt/cat12_longitudinal
+  mkdir -p "${SINGULARITY_ROOTFS}"/opt/cat12_long
 
 
 %files
@@ -27,13 +27,13 @@ From: ubuntu:20.04
   # container for reference. Don't let these get out of sync, i.e. don't change
   # the Matlab source code and then forget to recompile it before building the
   # container.
-  src                          /opt/cat12_longitudinal
-  matlab                       /opt/cat12_longitudinal
-  README.md                    /opt/cat12_longitudinal
+  src                          /opt/cat12_long
+  matlab                       /opt/cat12_long
+  README.md                    /opt/cat12_long
   ImageMagick-policy.xml       /opt
   
   # If we have local copies of these packages, we can use them instead of downloading
-  external/MATLAB_Runtime_R2019b_Update_8_glnxa64.zip     /opt/mcr_installer.zip
+  external/MCR_R2017b_glnxa64_installer.zip     /opt/mcr_installer.zip
  
 %labels
   Maintainer maureen.mchugo@vanderbilt.edu
@@ -69,10 +69,11 @@ From: ubuntu:20.04
   # Matlab Compiled Runtime installation. Uncomment the wget command to download 
   # the install package instead of using a local copy. The installed version of 
   # the runtime must match the Matlab version that was used to compile the code. 
+  # Make sure to use R2017b, v93 for cat 12 longitudinal batch to work.
   # Each version of the runtime has its own download URL and installed location:
   # https://www.mathworks.com/products/compiler/matlab-runtime.html
-  runtime_url=https://ssd.mathworks.com/supportfiles/downloads/R2019b/Release/6/deployment_files/installer/complete/glnxa64/MATLAB_Runtime_R2019b_Update_6_glnxa64.zip
-  runtime_location=/usr/local/MATLAB/MATLAB_Runtime/v97
+  runtime_url=https://ssd.mathworks.com/supportfiles/downloads/R2017b/deployment_files/R2017b/installers/glnxa64/MCR_R2017b_glnxa64_installer.zip
+  runtime_location=/usr/local/MATLAB/MATLAB_Runtime/v93
   #wget -nv -P /opt ${runtime_url} -O /opt/mcr_installer.zip
   unzip /opt/mcr_installer.zip -d /opt/mcr_installer
   /opt/mcr_installer/install -mode silent -agreeToLicense yes
@@ -82,7 +83,7 @@ From: ubuntu:20.04
   # now is the only time the container is writeable. The run_spm12.sh command
   # can be used with SPM12's 'function' argument to run any command that was
   # available in the Matlab path at compile time.
-  /opt/cat12_longitudinal/matlab/bin/run_spm12.sh ${runtime_location} function exit
+  /opt/cat12_long/matlab/bin/run_spm12.sh ${runtime_location} function exit
  
 
   # Create a few directories to use as bind points when we run the container
@@ -102,13 +103,16 @@ From: ubuntu:20.04
   # the compiled binary - note, this must match the runtime_location specified
   # above in the 'post' section. However we don't need to set the Matlab library
   # path here, because Matlab's auto-generated run_??.sh script does it for us.
+  # This needs to run with matlab R2017b (v9.3) for the compiled cat12 longitudinal batch
+  # to run. Otherwise, it fails but without any sort of helpful error, just no valid batch job    
+  # error.
   export MATLAB_SHELL=/usr/bin/bash
-  export MATLAB_RUNTIME=/usr/local/MATLAB/MATLAB_Runtime/v97
+  export MATLAB_RUNTIME=/usr/local/MATLAB/MATLAB_Runtime/v93
     
   # Path
   # We add the src directory, which contains shell scripts etc; and the 
   # matlab/bin directory, which contains the compiled Matlab binary.
-  export PATH=/opt/cat12_longitudinal/src:/opt/cat12_longitudinal/matlab/bin:${PATH}
+  export PATH=/opt/cat12_long/src:/opt/cat12_long/matlab/bin:${PATH}
 
 
 %runscript
