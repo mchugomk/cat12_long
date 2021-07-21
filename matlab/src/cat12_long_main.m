@@ -41,12 +41,20 @@ centsurflist=cell(length(t1list_nii)+1,1); % central surface
 centsurflist{1}=fullfile(out_dir,'surf',['lh.central.avg_' fname1 '.gii']);
 thicksurflist=cell(length(t1list_nii)+1,1);; % cortical thickness
 thicksurflist{1}=fullfile(out_dir,'surf',['lh.thickness.avg_' fname1 '.gii']);
+gyrisurflist=cell(length(t1list_nii)+1,1); % gyrification
+gyrisurflist{1}=fullfile(out_dir,'surf',['lh.gyrification.avg_' fname1 '.gii']);
+depthsurflist=cell(length(t1list_nii)+1,1); % depth
+depthsurflist{1}=fullfile(out_dir,'surf',['lh.depth.avg_' fname1 '.gii']);
+fracsurflist=cell(length(t1list_nii)+1,1); % fractal
+fracsurflist{1}=fullfile(out_dir,'surf',['lh.fractaldimension.avg_' fname1 '.gii']);
 for n=2:length(t1list_nii)+1
     [fpath,fname,fext]=fileparts(t1list_nii{n-1});
     centsurflist{n}=fullfile(out_dir,'surf',['lh.central.r' fname '.gii']); 
     thicksurflist{n}=fullfile(out_dir,'surf',['lh.thickness.r' fname '.gii']);
+    gyrisurflist{n}=fullfile(out_dir,'surf',['lh.gyrification.r' fname '.gii']);
+    depthsurflist{n}=fullfile(out_dir,'surf',['lh.depth.r' fname '.gii']);
+    fracsurflist{n}=fullfile(out_dir,'surf',['lh.fractaldimension.r' fname '.gii']);
 end
-
 
 % Start spm
 spm_jobman('initcfg');
@@ -145,9 +153,14 @@ matlabbatch{4}.spm.tools.cat.stools.surfextract.norm = 0;
 matlabbatch{4}.spm.tools.cat.stools.surfextract.FS_HOME = '<UNDEFINED>';
 matlabbatch{4}.spm.tools.cat.stools.surfextract.nproc = nproc; %0;
 matlabbatch{4}.spm.tools.cat.stools.surfextract.lazy = 0;
-matlabbatch{5}.spm.tools.cat.stools.surf2roi.cdata{1}(1) = cfg_dep('Extract additional surface parameters: Left MNI gyrification', substruct('.','val', '{}',{4}, '.','val', '{}',{1}, '.','val', '{}',{1}, '.','val', '{}',{1}, '.','val', '{}',{1}), substruct('()',{1}, '.','lPGI', '()',{':'}));
-matlabbatch{5}.spm.tools.cat.stools.surf2roi.cdata{1}(2) = cfg_dep('Extract additional surface parameters: Left fractal dimension', substruct('.','val', '{}',{4}, '.','val', '{}',{1}, '.','val', '{}',{1}, '.','val', '{}',{1}, '.','val', '{}',{1}), substruct('()',{1}, '.','lPFD', '()',{':'}));
-matlabbatch{5}.spm.tools.cat.stools.surf2roi.cdata{1}(3) = cfg_dep('Extract additional surface parameters: Left sulcal depth', substruct('.','val', '{}',{4}, '.','val', '{}',{1}, '.','val', '{}',{1}, '.','val', '{}',{1}, '.','val', '{}',{1}), substruct('()',{1}, '.','lPSD', '()',{':'}));
+matlabbatch{5}.spm.tools.cat.stools.surf2roi.cdata={thicksurflist
+                                                    gyrisurflist
+                                                    depthsurflist
+                                                    fracsurflist
+                                                   }';
+% matlabbatch{5}.spm.tools.cat.stools.surf2roi.cdata{1}(1) = cfg_dep('Extract additional surface parameters: Left MNI gyrification', substruct('.','val', '{}',{4}, '.','val', '{}',{1}, '.','val', '{}',{1}, '.','val', '{}',{1}, '.','val', '{}',{1}), substruct('()',{1}, '.','lPGI', '()',{':'}));
+% matlabbatch{5}.spm.tools.cat.stools.surf2roi.cdata{1}(2) = cfg_dep('Extract additional surface parameters: Left fractal dimension', substruct('.','val', '{}',{4}, '.','val', '{}',{1}, '.','val', '{}',{1}, '.','val', '{}',{1}, '.','val', '{}',{1}), substruct('()',{1}, '.','lPFD', '()',{':'}));
+% matlabbatch{5}.spm.tools.cat.stools.surf2roi.cdata{1}(3) = cfg_dep('Extract additional surface parameters: Left sulcal depth', substruct('.','val', '{}',{4}, '.','val', '{}',{1}, '.','val', '{}',{1}, '.','val', '{}',{1}, '.','val', '{}',{1}), substruct('()',{1}, '.','lPSD', '()',{':'}));
 matlabbatch{5}.spm.tools.cat.stools.surf2roi.rdata ={fullfile(spm('dir'),'toolbox','cat12','atlases_surfaces','lh.Schaefer2018_100Parcels_17Networks_order.annot')
                                                       fullfile(spm('dir'),'toolbox','cat12','atlases_surfaces','lh.Schaefer2018_200Parcels_17Networks_order.annot')
                                                       fullfile(spm('dir'),'toolbox','cat12','atlases_surfaces','lh.Schaefer2018_400Parcels_17Networks_order.annot')
