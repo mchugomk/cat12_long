@@ -18,7 +18,7 @@ cat12_long_entrypoint.sh \
     --t1_1_niigz ../INPUTS/t1_1.nii.gz \
     --t1_2_niigz ../INPUTS/t1_2.nii.gz \
     --longmodel 1 \
-    --nproc 18 \
+    --nproc 0 \
     --gcutstr 2 \
     --vox 1 \
     --bb 12 \
