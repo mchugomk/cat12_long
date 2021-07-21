@@ -58,11 +58,11 @@ do
             # Full path and filename to input T1 image 4
             export t1_4_niigz="$2"; shift; shift ;;
 
-		--longmodel)
+	--longmodel)
             # Model for longitudinal processing
             export longmodel="$2"; shift; shift ;;
             
-		--nproc)
+	--nproc)
             # Number of cores/processors for parallel processing
             export nproc="$2"; shift; shift ;;
         
