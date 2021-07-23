@@ -12,10 +12,9 @@
 
 singularity run --cleanenv --contain \
 	--home $(pwd -P)/INPUTS \
-    	--bind INPUTS:/tmp \
     	--bind INPUTS:/INPUTS \
     	--bind OUTPUTS:/OUTPUTS \
-	cat12_long_spider.simg
+	cat12_long_v1.0.0.simg
     	--t1_1_niigz /INPUTS/t1_1.nii.gz \
     	--t1_2_niigz /INPUTS/t1_2.nii.gz \
     	--longmodel 1 \
