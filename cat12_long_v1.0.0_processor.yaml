@@ -7,10 +7,9 @@ proctype: cat12_long_v1
 
 inputs:
   default:
-    container_path: cat12_long_spider_v1.0.0.simg
-    diameter_mm: 30
+    container_path: cat12_long_v1.0.0.simg
     longmodel: 1
-    nproc: 18
+    nproc: 0
     gcutstr: 2
     vox: 1
     bb: 12
@@ -83,11 +82,15 @@ command: >-
   --home $INDIR
   --bind $INDIR:/INPUTS
   --bind $OUTDIR:/OUTPUTS
-  {container_path}
-  --t1_niigz /INPUTS/{t1_niigz}
-  --seg_niigz /INPUTS/{seg_niigz}
-  --diameter_mm {diameter_mm}
-  --label_info "{project} {subject} {session} {scan}"
+  {container_path} \
+  --t1_1_niigz /INPUTS/{t1_niigz}
+  --t1_2_niigz /INPUTS/{t1_niigz}
+  --longmodel 1 \
+  --nproc 0 \
+  --gcutstr 2 \
+  --vox 1 \
+  --bb 12 \
+  --fwhm 4 \
   --out_dir /OUTPUTS
   
 attrs:
