@@ -17,12 +17,11 @@
 #	--bb 12 \
 #	--fwhm 4 \
 #	--label_info "UNKNOWN_SCAN" \
-#	--out_dir "../OUTPUTS"
+#	--out_dir /OUTPUTS"
 #
 
 # This statement at the top of every bash script is helpful for debugging
 echo Running $(basename "${BASH_SOURCE}")
-
 
 # Initialize defaults for any input parameters where that seems useful
 export t1_3_niigz="none"	# Optional 3rd input T1 
@@ -34,7 +33,7 @@ export vox=1
 export bb=12
 export fwhm=4
 export label_info="UNKNOWN_SCAN"
-export out_dir="../OUTPUTS"
+export out_dir="/OUTPUTS"
 
 
 # Parse input options
